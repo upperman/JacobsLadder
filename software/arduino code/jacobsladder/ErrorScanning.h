@@ -4,3 +4,6 @@
 #endif
 int CurrentScanner();
 int InputVoltageScanner();
+float AverageCalculation(int AnalogChannel);
+
+

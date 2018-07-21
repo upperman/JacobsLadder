@@ -53,3 +53,5 @@ sei();//allow interrupts
 One last thing to note- certain timer setups will actually disable some of the Arduino library functions.  Timer0 is used by the functions millis() and delay(), if you manually set up timer0, these functions will not work correctly.
 Additionally, all three timers underwrite the function analogWrite().  Manually setting up a timer will stop analogWrite() from working.
 http://www.instructables.com/id/Arduino-Timer-Interrupts/
+
+*/

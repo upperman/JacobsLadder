@@ -7,20 +7,20 @@ void MyErrorHandler(int ErrorCode)
   {
     while (1==1)
     {
-    digitalWrite(HVRelay,0);
+    digitalWrite(HVRelay1,0);
     digitalWrite(ErrorLed,1);
     delay(200);
     digitalWrite(ErrorLed,0);
     delay(200);
     Serial.println("Error 1: OverCurrent");
-    delay(3000);
+    delay(ErrorCodeBlinkSpeed);
     }
   }
     if (ErrorCode == 2)
     {
       while (1==1)
       {
-        digitalWrite(HVRelay,0);
+        digitalWrite(HVRelay1,0);
         digitalWrite(ErrorLed,1);
         delay(200);
         digitalWrite(ErrorLed,0);
@@ -29,14 +29,14 @@ void MyErrorHandler(int ErrorCode)
         delay(200);
         digitalWrite(ErrorLed,0);
         Serial.println("Error 2: Low DC Input Voltage");
-        delay(3000);
+        delay(ErrorCodeBlinkSpeed);
       }
     }
     if (ErrorCode == 3)
     {
       while (1==1)
       {
-        digitalWrite(HVRelay,0);
+        digitalWrite(HVRelay1,0);
         digitalWrite(ErrorLed,1);
         delay(200);
         digitalWrite(ErrorLed,0);
@@ -49,7 +49,7 @@ void MyErrorHandler(int ErrorCode)
         delay(200);
         digitalWrite(ErrorLed,0);    
         Serial.println("Error 3: blablabla");
-        delay(3000);
+        delay(ErrorCodeBlinkSpeed);
       }
     }
     delay(50);
