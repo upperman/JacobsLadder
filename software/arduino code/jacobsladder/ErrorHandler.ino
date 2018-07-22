@@ -7,6 +7,7 @@ void MyErrorHandler(int ErrorCode)
   {
     while (1==1)
     {
+    digitalWrite(HVRelay2,0);
     digitalWrite(HVRelay1,0);
     digitalWrite(ErrorLed,1);
     delay(200);
@@ -20,6 +21,7 @@ void MyErrorHandler(int ErrorCode)
     {
       while (1==1)
       {
+        digitalWrite(HVRelay2,0);
         digitalWrite(HVRelay1,0);
         digitalWrite(ErrorLed,1);
         delay(200);
@@ -36,6 +38,7 @@ void MyErrorHandler(int ErrorCode)
     {
       while (1==1)
       {
+        digitalWrite(HVRelay2,0);
         digitalWrite(HVRelay1,0);
         digitalWrite(ErrorLed,1);
         delay(200);

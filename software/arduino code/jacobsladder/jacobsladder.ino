@@ -20,7 +20,7 @@
 #define CurrentMax 3.7 //Maximum current detected before an error occurs
 #define VoltageMin 4.7 //minimum input voltage allowed
 #define Volt_Ref 5.0 //analog voltage reference value Volt_Ref/1023= volt/ADC_Val
-#define DelayVal 500 //delay value for ladder before it turns off
+#define DelayVal 10 //delay value for ladder before it turns off ex: 31 = 30 seconds
 #define ButtonDelay 200 //delay for start button
 #define ErrorCodeBlinkSpeed 2000
 
@@ -42,6 +42,7 @@ void MyErrorHandler();
 int InputVoltageScanner();
 void StartProgram(int ActivationVar);
 int ButtonPressedCheck(int ActivationVar);
+int ErrorChecking();
 /***********************************************Structures*********************************************/
 struct PlaceHolder {
    int temp = 0;
@@ -58,6 +59,8 @@ void setup()
   pinMode(StartButton, INPUT); //Defines the StartButton as an input
   pinMode(HVRelay1, OUTPUT);  //Defines the HVRelay as an output
   digitalWrite(HVRelay1,0); //Initilizing the state for the HVRelay (off)
+  pinMode(HVRelay2, OUTPUT);  //Defines the HVRelay as an output
+  digitalWrite(HVRelay2,0); //Initilizing the state for the HVRelay (off)
   pinMode(ErrorLed, OUTPUT); //Defines the ErrorLed as an output
   digitalWrite(ErrorLed,0); //Initializing the state for the ErrorLed (off)
 }
@@ -74,43 +77,25 @@ void StartProgram(int ActivationVar)
   while (1)
   {
   int counter=0;
-  ErrorVal=InputVoltageScanner();
-  if (ErrorVal ==0)
-  {
-    ErrorVal=CurrentScanner();
-  }
-  MyErrorHandler(ErrorVal);
+  ErrorVal = ErrorChecking();
   ActivationVar=ButtonPressedCheck(ActivationVar);
   Serial.println("Error Code: ");
   Serial.println(ErrorVal);
-   Serial.println("The button var:");
-  Serial.println(ActivationVar);
- 
-   delay(1000);
-  
+  Serial.println("The button var:");
+  Serial.println(ActivationVar);  
   if (ActivationVar==1)
   {
    digitalWrite(FlipFlopReset,0);
    delay(ButtonDelay); 
    digitalWrite(FlipFlopReset,1);
    ActivationVar = 0;
-   }
-   /*
-    while (counter < 50)
+   if (ErrorVal == 0)
     {
-     ErrorVal = CurrentScanner();
-     ErrorVal = InputVoltageScanner();
-     MyErrorHandler(ErrorVal);
-     counter++;
-     Serial.println("The Error Code:");
-     Serial.println(ErrorVal);
-     MyErrorHandler(ErrorVal);
-     delay(100);
+      digitalWrite (NeoLED, 1);
+      ActivateHV();
+      digitalWrite (NeoLED, 0);
     }
-    digitalWrite(HVRelay,0);
-  }     
-}
-*/
+   }
   }
 }
 
@@ -119,4 +104,35 @@ int ButtonPressedCheck(int ActivationVar)
   ActivationVar = digitalRead(StartButton);
   return ActivationVar;
 }
+
+int ErrorChecking()
+{
+  int ErrorVal = 0;
+  
+  ErrorVal=InputVoltageScanner();
+  if (ErrorVal ==0)
+  {
+    ErrorVal=CurrentScanner();
+  }
+  MyErrorHandler(ErrorVal);  
+  return ErrorVal;
+}
+
+int ActivateHV()
+{
+  int ErrorVal = 0;
+  int counter = 0;
+
+  while (counter < DelayVal)
+  {
+  digitalWrite(HVRelay1,1);
+  digitalWrite(HVRelay2,1);
+  ErrorVal = ErrorChecking();
+  counter ++;
+  delay(1000);
+  }
+  digitalWrite(HVRelay2,0);
+  digitalWrite(HVRelay1,0);
+}
+
 
