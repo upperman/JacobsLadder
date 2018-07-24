@@ -63,6 +63,8 @@ void setup()
   digitalWrite(HVRelay2,0); //Initilizing the state for the HVRelay (off)
   pinMode(ErrorLed, OUTPUT); //Defines the ErrorLed as an output
   digitalWrite(ErrorLed,0); //Initializing the state for the ErrorLed (off)
+  pinMode(NeoLED,OUTPUT);
+  digitalWrite(NeoLED,0);
 }
 
 void loop() 
@@ -85,15 +87,17 @@ void StartProgram(int ActivationVar)
   Serial.println(ActivationVar);  
   if (ActivationVar==1)
   {
-   digitalWrite(FlipFlopReset,0);
-   delay(ButtonDelay); 
+    
    digitalWrite(FlipFlopReset,1);
    ActivationVar = 0;
    if (ErrorVal == 0)
     {
       digitalWrite (NeoLED, 1);
+      delay(3000);
       ActivateHV();
       digitalWrite (NeoLED, 0);
+      digitalWrite(FlipFlopReset,0);
+      delay(ButtonDelay);
     }
    }
   }
